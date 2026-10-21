@@ -56,14 +56,27 @@ function App() {
     const next = [...photos]
     ;[next[index], next[target]] = [next[target], next[index]]
     setPhotos(next)
-    setDone(false)
-    setPdfBytes(undefined)
-    if (pdfUrl) URL.revokeObjectURL(pdfUrl)
-    pdfUrlRef.current = ''
-    setPdfUrl('')
-  }  const removePhoto = (id:string) => {const p=photos.find(x=>x.id===id); if(p)URL.revokeObjectURL(p.url);setPhotos(xs=>xs.filter(x=>x.id!==id));setPdfBytes(undefined);setPdfUrl('')}
+       setDone(false);
+    setPdfBytes(undefined);
+
+    if (pdfUrl) URL.revokeObjectURL(pdfUrl);
+
+    pdfUrlRef.current = '';
+    setPdfUrl('');
+  };
+
+  const removePhoto = (id: string) => {
+    const p = photos.find((x) => x.id === id);
+
+    if (p) URL.revokeObjectURL(p.url);
+
+    setPhotos((xs) => xs.filter((x) => x.id !== id));
+    setPdfBytes(undefined);
+    setPdfUrl('');
+  };
+
   const generate = async () => {
-    if(!photos.length)return
+    if (!photos.length) return;
     setBusy(true);setProgress(0);setMessage('')
     try {
       const { PDFDocument } = await import('pdf-lib')
